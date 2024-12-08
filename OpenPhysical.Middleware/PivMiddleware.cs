@@ -1,22 +1,26 @@
 ﻿#region
 
-using System.Diagnostics.CodeAnalysis;
-using JetBrains.Annotations;
-using OpenPhysical.CardEdge.Application;
-using OpenPhysical.CardEdge.Credential;
-using OpenPhysical.CardEdge.PivApplication;
-using OpenPhysical.CardEdge.Readers;
 using static OpenPhysical.Middleware.PivStatusWord;
-using ApplicationId = OpenPhysical.CardEdge.Application.ApplicationId;
 
 #endregion
 
 namespace OpenPhysical.Middleware;
 
+#region
+
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using CardEdge.Application;
+using CardEdge.Credential;
+using CardEdge.PivApplication;
+using CardEdge.Readers;
+using JetBrains.Annotations;
+
+#endregion
+
 /// <summary>
 ///     PIV Middleware, per SP 800-73-5
 ///     https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73pt3-5.pdf
-///
 ///     This interface serves as a facade over the Card Edge functionality, providing a mostly-compatible API for the PIV
 ///     application.
 /// </summary>
@@ -58,10 +62,7 @@ public class PivMiddleware
     /// <param name="card"></param>
     /// <returns></returns>
     [PublicAPI]
-    public static PivStatusWord PivDisconnect(ICard card)
-    {
-        return PivOk;
-    }
+    public static PivStatusWord PivDisconnect(ICard card) => PivOk;
 
     /// <summary>
     ///     Set the PIV Card Application as the currently selected card application and establish the PIV Card Application’s
@@ -85,10 +86,7 @@ public class PivMiddleware
     /// <param name="card"></param>
     /// <returns></returns>
     [PublicAPI]
-    public static PivStatusWord PivEstablishSecureMessaging(ICard card)
-    {
-        return PivOk;
-    }
+    public static PivStatusWord PivEstablishSecureMessaging(ICard card) => PivOk;
 
     /// <summary>
     ///     Set the security state within the PIV Card Application.
@@ -97,10 +95,8 @@ public class PivMiddleware
     /// <param name="authenticators"></param>
     /// <returns></returns>
     [PublicAPI]
-    public static PivStatusWord PivLogIntoCardApplication(ICard card, IEnumerable<IAuthenticator> authenticators)
-    {
-        return PivOk;
-    }
+    public static PivStatusWord PivLogIntoCardApplication(ICard card, IEnumerable<IAuthenticator> authenticators) =>
+        PivOk;
 
     /// <summary>
     ///     Return the entire data content of the named data object.
@@ -122,10 +118,7 @@ public class PivMiddleware
     /// <param name="card"></param>
     /// <returns></returns>
     [PublicAPI]
-    public static PivStatusWord PivLogoutOfCardApplication(ICard card)
-    {
-        return PivOk;
-    }
+    public static PivStatusWord PivLogoutOfCardApplication(ICard card) => PivOk;
 
     /// <summary>
     ///     Perform a cryptographic operation, such as encryption or signing on a sequence of bytes.  SP 800-73-5 Part 1,
@@ -153,10 +146,7 @@ public class PivMiddleware
     /// <param name="input"></param>
     /// <returns></returns>
     [PublicAPI]
-    public static PivStatusWord PivPutData(ICard card, ObjectIdentifier oid, byte[] input)
-    {
-        return PivOk;
-    }
+    public static PivStatusWord PivPutData(ICard card, ObjectIdentifier oid, byte[] input) => PivOk;
 
     /// <summary>
     ///     Generates an asymmetric key pair in the currently selected card application.

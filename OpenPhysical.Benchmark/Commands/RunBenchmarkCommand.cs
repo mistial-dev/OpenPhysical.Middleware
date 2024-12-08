@@ -1,19 +1,26 @@
 ﻿#region
 
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using JetBrains.Annotations;
-using log4net;
-using OpenPhysical.CardEdge;
-using OpenPhysical.CardEdge.Readers;
-using OpenPhysical.Middleware;
-using Spectre.Console;
-using Spectre.Console.Cli;
-using ApplicationId = OpenPhysical.CardEdge.Application.ApplicationId;
-
 #endregion
 
 namespace OpenPhysical.Benchmark.Commands;
+
+#region
+
+using System;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Threading.Tasks;
+using CardEdge;
+using CardEdge.Readers;
+using JetBrains.Annotations;
+using log4net;
+using Middleware;
+using Spectre.Console;
+using Spectre.Console.Cli;
+using ApplicationId = CardEdge.Application.ApplicationId;
+
+#endregion
 
 /// <summary>
 ///     Runs a benchmark on the inserted PIV card
@@ -28,6 +35,20 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
     private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 #endif
 
+    /// <summary>
+    ///     Registers this command with the parent command
+    /// </summary>
+    /// <param name="parent"></param>
+    [UsedImplicitly]
+#pragma warning disable CA1822
+    public void Register(IConfigurator parent)
+#pragma warning restore CA1822
+    {
+        parent.AddCommand<RunBenchmarkCommand>("run")
+            .WithDescription("Benchmark inserted PIV card")
+            .WithExample("run", "auto");
+    }
+
     public override Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
         // Attempt to find a reader
@@ -39,7 +60,10 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
         AnsiConsole.MarkupLine("Selected reader: [bold]{0}[/]", reader.Name);
 
         // Make sure we have a PIN
-        if (string.IsNullOrWhiteSpace(settings.Pin)) settings.Pin = PromptUserForPin();
+        if (string.IsNullOrWhiteSpace(settings.Pin))
+        {
+            settings.Pin = PromptUserForPin();
+        }
 
         // Use the PIV Middleware to connect to the card, throwing an exception if status is not PivOk
         var status = PivMiddleware.PivConnect(SharedConnection, reader, out var card);
@@ -50,7 +74,8 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
         }
 
         // Select the PIV application
-        status = PivMiddleware.PivSelectApplication(card, ApplicationId.PivApplicationTruncated, out var applicationProperties);
+        status = PivMiddleware.PivSelectApplication(card, ApplicationId.PivApplicationTruncated,
+            out var applicationProperties);
         if (status is not PivStatusWord.PivOk)
         {
             AnsiConsole.MarkupLine("[red]Error selecting PIV application[/]");
@@ -71,8 +96,12 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
     {
         // Validate the PIN
         if (settings.Pin is not null)
+        {
             if (ValidatePin(settings.Pin).Successful is false)
+            {
                 return ValidatePin(settings.Pin);
+            }
+        }
 
         return ValidationResult.Success();
     }
@@ -85,7 +114,10 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
     private static ValidationResult ValidatePin(string pin)
     {
         // Ensure the pin is numeric
-        if (!int.TryParse(pin, out _)) return ValidationResult.Error("PIN must be numeric");
+        if (!int.TryParse(pin, out _))
+        {
+            return ValidationResult.Error("PIN must be numeric");
+        }
 
         return pin.Length is < 6 or > 8 ? ValidationResult.Error("PIN must be 6-8 digits") : ValidationResult.Success();
     }
@@ -147,9 +179,7 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
                 var selectedReader = AnsiConsole.Prompt(
                     new SelectionPrompt<IPivReader>
                     {
-                        Title = "Select a reader",
-                        Converter = v => v.Name,
-                        PageSize = 10
+                        Title = "Select a reader", Converter = v => v.Name, PageSize = 10
                     }.AddChoices(readers)
                 );
                 return selectedReader;
@@ -173,19 +203,5 @@ public class RunBenchmarkCommand : AsyncCommand<RunBenchmarkCommand.Settings>, I
         [CommandOption("--pin <pin>")]
         [Description("The PIN to use for the PIV card")]
         public string? Pin { get; set; }
-    }
-
-    /// <summary>
-    /// Registers this command with the parent command
-    /// </summary>
-    /// <param name="parent"></param>
-    [UsedImplicitly]
-#pragma warning disable CA1822
-    public void Register(IConfigurator parent)
-#pragma warning restore CA1822
-    {
-        parent.AddCommand<RunBenchmarkCommand>("run")
-            .WithDescription("Benchmark inserted PIV card")
-            .WithExample("run", "auto");
     }
 }

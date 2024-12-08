@@ -1,10 +1,15 @@
 ﻿#region
 
-using JetBrains.Annotations;
-
 #endregion
 
 namespace OpenPhysical.CardEdge.Readers;
+
+#region
+
+using System.Collections.Generic;
+using JetBrains.Annotations;
+
+#endregion
 
 public abstract class PivReader : IPivReader
 {

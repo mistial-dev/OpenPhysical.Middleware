@@ -1,10 +1,14 @@
 ﻿#region
 
-using JetBrains.Annotations;
-
 #endregion
 
 namespace OpenPhysical.Middleware;
+
+#region
+
+using JetBrains.Annotations;
+
+#endregion
 
 [PublicAPI]
 public enum PivStatusWord : byte

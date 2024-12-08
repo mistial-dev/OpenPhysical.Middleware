@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenPhysical.Cli", "OpenPhysical.Cli\OpenPhysical.Cli.csproj", "{1D1D6C4D-F457-4D19-9B22-07EC85F6B3EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenPhysical.Test", "OpenPhysical.Test\OpenPhysical.Test.csproj", "{0EAF1064-C5A5-410A-8B72-E79E2FCE3C37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenPhysical.Benchmark", "OpenPhysical.Benchmark\OpenPhysical.Benchmark.csproj", "{DDFD6D5B-6360-4FBB-BCA9-BFF14921F2F7}"
@@ -16,10 +14,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D1D6C4D-F457-4D19-9B22-07EC85F6B3EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D1D6C4D-F457-4D19-9B22-07EC85F6B3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D1D6C4D-F457-4D19-9B22-07EC85F6B3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D1D6C4D-F457-4D19-9B22-07EC85F6B3EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EAF1064-C5A5-410A-8B72-E79E2FCE3C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0EAF1064-C5A5-410A-8B72-E79E2FCE3C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EAF1064-C5A5-410A-8B72-E79E2FCE3C37}.Release|Any CPU.ActiveCfg = Release|Any CPU

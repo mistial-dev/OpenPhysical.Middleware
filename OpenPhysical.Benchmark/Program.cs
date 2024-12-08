@@ -1,13 +1,6 @@
 ﻿#region
 
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-using System.Diagnostics;
-using System.Reflection;
-using log4net;
 using log4net.Config;
-using OpenPhysical.Benchmark.Commands;
-using Spectre.Console.Cli;
 
 #endregion
 
@@ -18,12 +11,31 @@ using Spectre.Console.Cli;
 
 namespace OpenPhysical.Benchmark;
 
+#region
+
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Commands;
+using log4net;
+using Spectre.Console.Cli;
+
+#endregion
+
+/// <summary>
+///     PIV Benchmark application
+/// </summary>
 internal class Program
 {
 #if DEBUG
+    // Log4net logger
     private static readonly ILog _log = LogManager.GetLogger(typeof(Program));
 #endif
 
+    /// <summary>
+    ///     Entry point for the application
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
     public static async Task<int> Main(string[] args)
     {
 #if DEBUG
@@ -42,9 +54,9 @@ internal class Program
             // Add commands from the MEF container
             foreach (var command in mefContainer.GetExportedValues<IBenchmarkCommand>())
             {
+                // Commands can register themselves with the root command
                 command.Register(config);
             }
-
         });
 
         return await benchmarkApp.RunAsync(args);

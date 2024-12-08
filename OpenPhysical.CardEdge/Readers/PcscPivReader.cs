@@ -1,10 +1,16 @@
 ﻿#region
 
-using WSCT.Wrapper.Desktop.Core;
-
 #endregion
 
 namespace OpenPhysical.CardEdge.Readers;
+
+#region
+
+using System;
+using System.Collections.Generic;
+using WSCT.Wrapper.Desktop.Core;
+
+#endregion
 
 internal class PcscPivReader : IPivReader
 {
@@ -18,15 +24,12 @@ internal class PcscPivReader : IPivReader
     /// </summary>
     internal required string ReaderName;
 
-    public void ColdReset()
-    {
-        throw new NotImplementedException();
-    }
+    public void ColdReset() => throw new NotImplementedException();
 
     /// <summary>
     ///     Provides the name of the reader.
     /// </summary>
-    public string Name => ReaderName;
+    public string Name => this.ReaderName;
 
     /// <summary>
     ///     Scans for all PC/SC PIV readers.
@@ -45,11 +48,9 @@ internal class PcscPivReader : IPivReader
         {
             context.ListReaders(group);
             foreach (var reader in context.Readers)
-                yield return new PcscPivReader
-                {
-                    Context = context,
-                    ReaderName = reader
-                };
+            {
+                yield return new PcscPivReader { Context = context, ReaderName = reader };
+            }
         }
     }
 }
